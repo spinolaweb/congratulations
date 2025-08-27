@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title>Confirmation d'offre</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--accent:#0f766e;--muted:#6b7280}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,var(--bg),#eef2f7);padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom)}
+    .card{width:100%;max-width:480px;background:var(--card);border-radius:14px;box-shadow:0 6px 24px rgba(15,23,42,0.08);padding:28px;text-align:center}
+    .icon{width:76px;height:76px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#1fb6b3);display:flex;align-items:center;justify-content:center;color:white;box-shadow:0 6px 18px rgba(15,23,42,0.08)}
+    h1{font-size:20px;margin:8px 0;color:#072f2b}
+    p{color:var(--muted);margin:10px 0 18px;line-height:1.4}
+    .muted-small{font-size:13px;color:#94a3b8;margin-top:8px}
+    .actions{display:flex;gap:10px;justify-content:center;margin-top:6px}
+    a.button{display:inline-block;padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:600}
+    .whatsapp{background:linear-gradient(90deg,#25D366,#1DA851);color:#04281f}
+    .download{background:#eef6f6;color:#044a47;border:1px solid rgba(4,74,71,0.06)}
+    footer{margin-top:16px;font-size:12px;color:#9aa7b0}
+    @media (prefers-color-scheme:dark){:root{--bg:#051014;--card:#071018;--accent:#16a085;--muted:#94a3b8} body{background:linear-gradient(180deg,#021018,#04121a)}}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <div class="icon" aria-hidden>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1>Félicitations — Offre complétée</h1>
+    <p>Vous avez réussi l'offre. Prenez une capture d'écran de cette page et envoyez-la via WhatsApp pour valider.</p>
+
+    <div class="actions">
+      <a class="button whatsapp" id="shareBtn" href="#" role="button" aria-label="Partager via WhatsApp">Partager via WhatsApp</a>
+      <a class="button download" id="downloadBtn" href="#" role="button" aria-label="Télécharger la page">Télécharger la page</a>
+    </div>
+
+    <div class="muted-small">Astuce : appuyez longuement sur le bouton WhatsApp pour choisir le contact, puis collez la capture.</div>
+    <footer>Merci — Service professionnel</footer>
+  </div>
+
+  <script>
+    // Prépare le texte partagé (URL-encodé)
+    const shareText = encodeURIComponent("J'ai complété l'offre. Voici ma capture d'écran.");
+    const waUrl = 'https://wa.me/?text=' + shareText;
+    document.getElementById('shareBtn').setAttribute('href', waUrl);
+
+    // Génère un fichier HTML à télécharger (simple snapshot de la page)
+    document.getElementById('downloadBtn').addEventListener('click', function(e){
+      e.preventDefault();
+      const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([html], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'confirmation-offre.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
